@@ -23,3 +23,5 @@ java -jar target/permissionmap-<version>.jar
 * Optimizations with type finalization and membership
 * Add more fun dynamically generated data sets to test with
 * PermTester has a bunch of lazy duplication
+* Test caching at different levels in the tree mapper so it spends less time on tree generation
+* Optimize cache lookup to reduce string comparison load
