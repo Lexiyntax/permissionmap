@@ -18,3 +18,8 @@ mvn clean build
 java -jar target/permissionmap-<version>.jar
 ```
 
+## TODO
+* Unit testing, especially hammer on more corner cases
+* Optimizations with type finalization and membership
+* Add more fun dynamically generated data sets to test with
+* PermTester has a bunch of lazy duplication
