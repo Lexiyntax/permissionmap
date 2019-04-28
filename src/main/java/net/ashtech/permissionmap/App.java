@@ -9,8 +9,15 @@ package net.ashtech.permissionmap;
  */
 public class App {
     
+    private static PermTester tester = new PermTester();
+    
     public static void main(String[] args) {
-        System.out.println("Hello");
+        System.out.println("Basic Parsing Test");
+        doBasicTest();
+    }
+    
+    private static void doBasicTest() {
+        System.out.println(tester.doBasicTest());
     }
     
 }
