@@ -5,7 +5,7 @@ Currently three mapping types are implemented:
 * simple 'loop' map type taking a brute force approach
 * caching map type which takes the loop approach and wraps it with a cache
 * tree map type, which tokenizes the permission array into a tree then uses that for lookups
-!(https://github.com/Lexiyntax/permissionmap/sample-timings.png "Permission Mapper Timings")
+!(https://raw.githubusercontent.com/Lexiyntax/permissionmap/master/sample-timings.png)
 
 ## Building
 ```
