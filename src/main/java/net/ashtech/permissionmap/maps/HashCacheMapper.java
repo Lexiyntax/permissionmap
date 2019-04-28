@@ -10,14 +10,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
 /**
  * Caches results of basic loop mapping for quicker results if we have seen this
- * before; we cache previous 'true' actions assuming we want authorized users
- * we've seen before to have the quickest access
+ * before; does positive or negative caching by hashing both the target and the
+ * full permission list so any change is detected
  *
  * @author Daniel E. Markle <dmarkle@ashtech.net>
  */
@@ -25,10 +24,8 @@ public class HashCacheMapper implements PermInterface {
     
     Logger log = Logger.getLogger(HashCacheMapper.class.getName());
     
-    //in production we wouldn't need to store the target string, allowing future
-    //  lookup timing optimization via other implementations (i.e. in production
-    //  this may be in redis or another type of store)
-    private HashMap cache = new HashMap<String, String>();
+    //in production this may be in redis or another type of persistent store
+    private HashMap<String, Boolean> cache = new HashMap<>();
     
     //we could of course use this caching implentation on any mapper
     private BasicLoopMapper mapper = new BasicLoopMapper();
@@ -55,7 +52,7 @@ public class HashCacheMapper implements PermInterface {
     public void printCache() {
         Iterator cacheI = cache.entrySet().iterator();
         while (cacheI.hasNext()) {
-            Map.Entry<String, String> cacheEntry = (Map.Entry)cacheI.next();
+            Map.Entry<String, Boolean> cacheEntry = (Map.Entry)cacheI.next();
             System.out.println(
                     cacheEntry.getKey() + 
                     ": " + 
@@ -82,23 +79,14 @@ public class HashCacheMapper implements PermInterface {
             String digest = Base64.encode(dg.digest(bos.toByteArray()));
             
             if (cache.containsKey(digest)) {
-                //if we have a match in the cache, we're done; see cache management
-                //  comment below regarding why this bit is here
-                //result = true;
+                //if we have a match in the cache, we're done
                 log.fine("Cache hit");
-                return true;
+                return cache.get(digest);
             }
             else {
                 result = mapper.auth(target, permissions);
-            }
-
-            //this step is located here for cache management; fall through instead
-            //  of returning on true above if we want to do something to tell a 
-            //  persistent cache layer that we had a 'hit', current implementation 
-            //  only gets here if we were not in cache already
-            if (result) {
                 log.fine("Cache miss");
-                cache.put(digest, target);
+                cache.put(digest, result);
             }
             
         } 
