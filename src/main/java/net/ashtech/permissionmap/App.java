@@ -22,6 +22,7 @@ public class App {
         System.out.println("Token Tree Test");
         doTokenTreeTest();
 
+        System.out.println(tester.testDataToCSV());
     }
     
     private static void doBasicTest() {

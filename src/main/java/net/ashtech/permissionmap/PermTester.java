@@ -1,5 +1,6 @@
 package net.ashtech.permissionmap;
 
+import java.util.ArrayList;
 import net.ashtech.permissionmap.maps.BasicLoopMapper;
 import net.ashtech.permissionmap.maps.HashCacheMapper;
 import net.ashtech.permissionmap.maps.PermInterface;
@@ -15,7 +16,9 @@ public class PermTester {
     private TargetGenerator tgen = new TargetGenerator();
     private PermGenerator pgen = new PermGenerator();
 
-    int iterations = 10000;
+    private int iterations = 100000;
+    
+    private ArrayList<TimeDataPoint> tdp = new ArrayList<>();
     
     /**
      * Pretty format a target and permission set
@@ -61,13 +64,17 @@ public class PermTester {
         result += testBasicWithIterations(mapper, permset);
         long endTime = System.currentTimeMillis();
         
-        result += "Static Set Basic test mapper took " + (endTime - startTime) + " milliseconds\n";
+        TimeDataPoint tdp1 = new TimeDataPoint("Basic Loop", "Static", startTime, endTime);
+        result += "Static Set Basic test mapper took " + tdp1.getTimeDelta() + " milliseconds\n";
+        tdp.add(tdp1);
         
         startTime = System.currentTimeMillis();
         result += testBigBadWithIterations(mapper, pgen.bigBadSet());
         endTime = System.currentTimeMillis();
         
-        result += "Big Bad Set Basic test mapper took " + (endTime - startTime) + " milliseconds\n";
+        TimeDataPoint tdp2 = new TimeDataPoint("Basic Loop", "Big Bad", startTime, endTime);
+        result += "Big Bad Set Basic test mapper took " + tdp2.getTimeDelta() + " milliseconds\n";
+        tdp.add(tdp2);
         
         return result;
     }
@@ -89,13 +96,17 @@ public class PermTester {
         result += testBasicWithIterations(mapper, permset);
         long endTime = System.currentTimeMillis();
         
-        result += "Static Set With caching took " + (endTime - startTime) + " milliseconds\n";
+        TimeDataPoint tdp1 = new TimeDataPoint("Caching", "Static", startTime, endTime);
+        result += "Static Set With caching took " + tdp1.getTimeDelta() + " milliseconds\n";
+        tdp.add(tdp1);
 
         startTime = System.currentTimeMillis();
         result += testBigBadWithIterations(mapper, pgen.bigBadSet());
         endTime = System.currentTimeMillis();
         
-        result += "Big Bad Set With caching took " + (endTime - startTime) + " milliseconds\n";
+        TimeDataPoint tdp2 = new TimeDataPoint("Caching", "Big Bad", startTime, endTime);
+        result += "Big Bad Set With caching took " + tdp2.getTimeDelta() + " milliseconds\n";
+        tdp.add(tdp2);
 
         
         //dump the cache for debugging
@@ -119,13 +130,17 @@ public class PermTester {
         result += testBasicWithIterations(mapper, permset);
         long endTime = System.currentTimeMillis();
         
-        result += "Static Set with Tree Mapping took " + (endTime - startTime) + " milliseconds\n";
+        TimeDataPoint tdp1 = new TimeDataPoint("Tree", "Static", startTime, endTime);
+        result += "Static Set with Tree Mapping took " + tdp1.getTimeDelta() + " milliseconds\n";
+        tdp.add(tdp1);
                 
         startTime = System.currentTimeMillis();
         result += testBigBadWithIterations(mapper, pgen.bigBadSet());
         endTime = System.currentTimeMillis();
         
-        result += "Big Bad Set with Tree Mapping took " + (endTime - startTime) + " milliseconds\n";
+        TimeDataPoint tdp2 = new TimeDataPoint("Tree", "Big Bad", startTime, endTime);
+        result += "Big Bad Set with Tree Mapping took " + tdp2.getTimeDelta() + " milliseconds\n";
+        tdp.add(tdp2);
                 
         return result;
     }
@@ -170,6 +185,20 @@ public class PermTester {
         }
         
         return result;
+    }
+    
+    /**
+     * Output test timing data as CSV for easy graphing
+     * @return test timing data as csv
+     */
+    public String testDataToCSV() {
+        String s = "\"Mapper Name\",\"Set Name\",\"Time Delta\"\n";
+        for (TimeDataPoint t : tdp) {
+            s += "\"" + t.getMapperName() + "\",";
+            s += "\"" + t.getSetName() + "\",";
+            s += t.getTimeDelta() + "\n";
+        }
+        return s;
     }
     
 }
