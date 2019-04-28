@@ -80,6 +80,8 @@ public class PermTester {
         String result = "";
         
         result += formatSet(target, permset);
+
+        long startTime = System.currentTimeMillis();
         
         target = tgen.basicTargetTopMatch();
         result += formatAllowTest(target, mapper.auth(target,permset));
@@ -93,8 +95,14 @@ public class PermTester {
         target = tgen.basicTargetWildCardMatch();
         result += formatAllowTest(target, mapper.auth(target,permset));
 
+        long endTime = System.currentTimeMillis();
+        
+        result += "Without cache took " + (endTime - startTime) + " milliseconds\n";
+        
         //and again to test caching!
         
+        startTime = System.currentTimeMillis();
+        
         target = tgen.basicTargetTopMatch();
         result += formatAllowTest(target, mapper.auth(target,permset));
         
@@ -107,6 +115,10 @@ public class PermTester {
         target = tgen.basicTargetWildCardMatch();
         result += formatAllowTest(target, mapper.auth(target,permset));
 
+        endTime = System.currentTimeMillis();
+        
+        result += "With cache took " + (endTime - startTime) + " milliseconds\n";
+        
         //dump the cache for debugging
         
         mapper.printCache();
