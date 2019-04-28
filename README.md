@@ -10,7 +10,7 @@ Currently three mapping types are implemented:
 
 ## Building
 ```
-mvn clean build
+mvn clean package
 ```
 
 ## Running
