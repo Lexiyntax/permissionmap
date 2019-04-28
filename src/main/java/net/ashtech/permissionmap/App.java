@@ -12,11 +12,19 @@ public class App {
     private static PermTester tester = new PermTester();
     
     public static void main(String[] args) {
+        
         System.out.println("Basic Parsing Test");
         doBasicTest();
         
         System.out.println("Hash Cache Test");
         doHashCacheTest();
+
+        System.out.println("Basic Parsing Test Again");
+        doBasicTest();
+        
+        System.out.println("Hash Cache Again");
+        doHashCacheTest();
+
     }
     
     private static void doBasicTest() {

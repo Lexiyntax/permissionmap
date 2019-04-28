@@ -85,7 +85,7 @@ public class HashCacheMapper implements PermInterface {
                 //if we have a match in the cache, we're done; see cache management
                 //  comment below regarding why this bit is here
                 //result = true;
-                log.info("Cache hit");
+                log.fine("Cache hit");
                 return true;
             }
             else {
@@ -97,7 +97,7 @@ public class HashCacheMapper implements PermInterface {
             //  persistent cache layer that we had a 'hit', current implementation 
             //  only gets here if we were not in cache already
             if (result) {
-                log.info("Cache miss");
+                log.fine("Cache miss");
                 cache.put(digest, target);
             }
             

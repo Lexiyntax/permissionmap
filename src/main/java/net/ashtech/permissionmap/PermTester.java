@@ -2,6 +2,7 @@ package net.ashtech.permissionmap;
 
 import net.ashtech.permissionmap.maps.BasicLoopMapper;
 import net.ashtech.permissionmap.maps.HashCacheMapper;
+import net.ashtech.permissionmap.maps.PermInterface;
 
 /**
  * Permission mapping test implementation
@@ -13,6 +14,8 @@ public class PermTester {
     private TargetGenerator tgen = new TargetGenerator();
     private PermGenerator pgen = new PermGenerator();
 
+    int iterations = 100000;
+    
     /**
      * Pretty format a target and permission set
      * @param t target to print
@@ -54,19 +57,7 @@ public class PermTester {
         result += formatSet(target, permset);
         
         long startTime = System.currentTimeMillis();
-        
-        target = tgen.basicTargetTopMatch();
-        result += formatAllowTest(target, mapper.auth(target,permset));
-        
-        target = tgen.basicTargetBottomMatch();
-        result += formatAllowTest(target, mapper.auth(target,permset));
-
-        target = tgen.basicTargetNoMatch();
-        result += formatAllowTest(target, mapper.auth(target,permset));
-        
-        target = tgen.basicTargetWildCardMatch();
-        result += formatAllowTest(target, mapper.auth(target,permset));
-
+        result += testBasicWithIterations(mapper, permset);
         long endTime = System.currentTimeMillis();
         
         result += "Basic test mapper took " + (endTime - startTime) + " milliseconds\n";
@@ -88,46 +79,39 @@ public class PermTester {
         result += formatSet(target, permset);
 
         long startTime = System.currentTimeMillis();
-        
-        target = tgen.basicTargetTopMatch();
-        result += formatAllowTest(target, mapper.auth(target,permset));
-        
-        target = tgen.basicTargetBottomMatch();
-        result += formatAllowTest(target, mapper.auth(target,permset));
-
-        target = tgen.basicTargetNoMatch();
-        result += formatAllowTest(target, mapper.auth(target,permset));
-        
-        target = tgen.basicTargetWildCardMatch();
-        result += formatAllowTest(target, mapper.auth(target,permset));
-
+        result += testBasicWithIterations(mapper, permset);
         long endTime = System.currentTimeMillis();
         
-        result += "Without cache took " + (endTime - startTime) + " milliseconds\n";
-        
-        //and again to test caching!
-        
-        startTime = System.currentTimeMillis();
-        
-        target = tgen.basicTargetTopMatch();
-        result += formatAllowTest(target, mapper.auth(target,permset));
-        
-        target = tgen.basicTargetBottomMatch();
-        result += formatAllowTest(target, mapper.auth(target,permset));
-
-        target = tgen.basicTargetNoMatch();
-        result += formatAllowTest(target, mapper.auth(target,permset));
-        
-        target = tgen.basicTargetWildCardMatch();
-        result += formatAllowTest(target, mapper.auth(target,permset));
-
-        endTime = System.currentTimeMillis();
-        
-        result += "With cache took " + (endTime - startTime) + " milliseconds\n";
+        result += "With caching took " + (endTime - startTime) + " milliseconds\n";
         
         //dump the cache for debugging
         
         mapper.printCache();
+        
+        return result;
+    }
+    
+    private String testBasicWithIterations (PermInterface mapper, String[] permset) {
+        String result = "";
+        
+        String t1 = tgen.basicTargetTopMatch();
+        result += formatAllowTest(t1, mapper.auth(t1,permset));
+        
+        String t2 = tgen.basicTargetBottomMatch();
+        result += formatAllowTest(t2, mapper.auth(t2,permset));
+
+        String t3 = tgen.basicTargetNoMatch();
+        result += formatAllowTest(t3, mapper.auth(t3,permset));
+        
+        String t4 = tgen.basicTargetWildCardMatch();
+        result += formatAllowTest(t4, mapper.auth(t4,permset));
+
+        for (int i = 0; i < iterations; i++) {
+            mapper.auth(t1,permset);
+            mapper.auth(t2,permset);
+            mapper.auth(t3,permset);
+            mapper.auth(t4,permset);
+        }
         
         return result;
     }
