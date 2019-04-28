@@ -53,6 +53,8 @@ public class PermTester {
         
         result += formatSet(target, permset);
         
+        long startTime = System.currentTimeMillis();
+        
         target = tgen.basicTargetTopMatch();
         result += formatAllowTest(target, mapper.auth(target,permset));
         
@@ -65,6 +67,10 @@ public class PermTester {
         target = tgen.basicTargetWildCardMatch();
         result += formatAllowTest(target, mapper.auth(target,permset));
 
+        long endTime = System.currentTimeMillis();
+        
+        result += "Basic test mapper took " + (endTime - startTime) + " milliseconds\n";
+        
         return result;
     }
     
