@@ -14,10 +14,17 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Basic Parsing Test");
         doBasicTest();
+        
+        System.out.println("Hash Cache Test");
+        doHashCacheTest();
     }
     
     private static void doBasicTest() {
         System.out.println(tester.doBasicTest());
+    }
+    
+    private static void doHashCacheTest() {
+        System.out.println(tester.doHashCacheTest());
     }
     
 }

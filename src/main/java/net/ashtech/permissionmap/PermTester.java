@@ -1,6 +1,7 @@
 package net.ashtech.permissionmap;
 
 import net.ashtech.permissionmap.maps.BasicLoopMapper;
+import net.ashtech.permissionmap.maps.HashCacheMapper;
 
 /**
  * Permission mapping test implementation
@@ -64,6 +65,52 @@ public class PermTester {
         target = tgen.basicTargetWildCardMatch();
         result += formatAllowTest(target, mapper.auth(target,permset));
 
+        return result;
+    }
+    
+    /**
+     * Smoke tests hash cache mapper
+     * 
+     * @return pretty string output of hash cache mapper results
+     */
+    public String doHashCacheTest() {
+        String[] permset = pgen.staticSet();
+        HashCacheMapper mapper = new HashCacheMapper();
+        String target = "";
+        String result = "";
+        
+        result += formatSet(target, permset);
+        
+        target = tgen.basicTargetTopMatch();
+        result += formatAllowTest(target, mapper.auth(target,permset));
+        
+        target = tgen.basicTargetBottomMatch();
+        result += formatAllowTest(target, mapper.auth(target,permset));
+
+        target = tgen.basicTargetNoMatch();
+        result += formatAllowTest(target, mapper.auth(target,permset));
+        
+        target = tgen.basicTargetWildCardMatch();
+        result += formatAllowTest(target, mapper.auth(target,permset));
+
+        //and again to test caching!
+        
+        target = tgen.basicTargetTopMatch();
+        result += formatAllowTest(target, mapper.auth(target,permset));
+        
+        target = tgen.basicTargetBottomMatch();
+        result += formatAllowTest(target, mapper.auth(target,permset));
+
+        target = tgen.basicTargetNoMatch();
+        result += formatAllowTest(target, mapper.auth(target,permset));
+        
+        target = tgen.basicTargetWildCardMatch();
+        result += formatAllowTest(target, mapper.auth(target,permset));
+
+        //dump the cache for debugging
+        
+        mapper.printCache();
+        
         return result;
     }
     
