@@ -3,6 +3,7 @@ package net.ashtech.permissionmap;
 import net.ashtech.permissionmap.maps.BasicLoopMapper;
 import net.ashtech.permissionmap.maps.HashCacheMapper;
 import net.ashtech.permissionmap.maps.PermInterface;
+import net.ashtech.permissionmap.maps.TokenTreeMapper;
 
 /**
  * Permission mapping test implementation
@@ -14,7 +15,7 @@ public class PermTester {
     private TargetGenerator tgen = new TargetGenerator();
     private PermGenerator pgen = new PermGenerator();
 
-    int iterations = 100000;
+    int iterations = 10000;
     
     /**
      * Pretty format a target and permission set
@@ -101,6 +102,31 @@ public class PermTester {
         
         mapper.printCache();
         
+        return result;
+    }
+    
+    /**
+     * Smoke tests tree mapper
+     * 
+     * @return pretty string output of tree mapper results
+     */
+    public String doTreeMapperTest() {
+        String[] permset = pgen.staticSet();
+        TokenTreeMapper mapper = new TokenTreeMapper();
+        String result = "";
+        
+        long startTime = System.currentTimeMillis();
+        result += testBasicWithIterations(mapper, permset);
+        long endTime = System.currentTimeMillis();
+        
+        result += "Static Set with Tree Mapping took " + (endTime - startTime) + " milliseconds\n"
+                
+        startTime = System.currentTimeMillis();
+        result += testBigBadWithIterations(mapper, pgen.bigBadSet());
+        endTime = System.currentTimeMillis();
+        
+        result += "Big Bad Set with Tree Mapping took " + (endTime - startTime) + " milliseconds\n"
+                
         return result;
     }
     

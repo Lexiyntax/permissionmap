@@ -19,11 +19,8 @@ public class App {
         System.out.println("Hash Cache Test");
         doHashCacheTest();
 
-        System.out.println("Basic Parsing Test Again");
-        doBasicTest();
-        
-        System.out.println("Hash Cache Again");
-        doHashCacheTest();
+        System.out.println("Token Tree Test");
+        doTokenTreeTest();
 
     }
     
@@ -33,6 +30,10 @@ public class App {
     
     private static void doHashCacheTest() {
         System.out.println(tester.doHashCacheTest());
+    }
+    
+    private static void doTokenTreeTest() {
+        System.out.println(tester.doTreeMapperTest());
     }
     
 }
