@@ -1,6 +1,6 @@
 package net.ashtech.permissionmap.maps;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+import java.util.Base64;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -36,6 +36,8 @@ public class HashCacheMapper implements PermInterface {
     //we declare this globally so we can reuse the same one and reset it so it 
     //  cleans up instead of growing
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    
+    Base64.Encoder b64encoder = Base64.getEncoder();
     
     public HashCacheMapper() {
         try {
@@ -76,7 +78,7 @@ public class HashCacheMapper implements PermInterface {
             
             //we encode to base64 as byte[] can be dups in data structures due
             //  to the way it equality tests
-            String digest = Base64.encode(dg.digest(bos.toByteArray()));
+            String digest = b64encoder.encodeToString(dg.digest(bos.toByteArray()));
             
             if (cache.containsKey(digest)) {
                 //if we have a match in the cache, we're done

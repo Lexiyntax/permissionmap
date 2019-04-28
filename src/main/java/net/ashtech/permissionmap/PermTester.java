@@ -119,13 +119,13 @@ public class PermTester {
         result += testBasicWithIterations(mapper, permset);
         long endTime = System.currentTimeMillis();
         
-        result += "Static Set with Tree Mapping took " + (endTime - startTime) + " milliseconds\n"
+        result += "Static Set with Tree Mapping took " + (endTime - startTime) + " milliseconds\n";
                 
         startTime = System.currentTimeMillis();
         result += testBigBadWithIterations(mapper, pgen.bigBadSet());
         endTime = System.currentTimeMillis();
         
-        result += "Big Bad Set with Tree Mapping took " + (endTime - startTime) + " milliseconds\n"
+        result += "Big Bad Set with Tree Mapping took " + (endTime - startTime) + " milliseconds\n";
                 
         return result;
     }
