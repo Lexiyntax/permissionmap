@@ -60,7 +60,13 @@ public class PermTester {
         result += testBasicWithIterations(mapper, permset);
         long endTime = System.currentTimeMillis();
         
-        result += "Basic test mapper took " + (endTime - startTime) + " milliseconds\n";
+        result += "Static Set Basic test mapper took " + (endTime - startTime) + " milliseconds\n";
+        
+        startTime = System.currentTimeMillis();
+        result += testBigBadWithIterations(mapper, pgen.bigBadSet());
+        endTime = System.currentTimeMillis();
+        
+        result += "Big Bad Set Basic test mapper took " + (endTime - startTime) + " milliseconds\n";
         
         return result;
     }
@@ -82,7 +88,14 @@ public class PermTester {
         result += testBasicWithIterations(mapper, permset);
         long endTime = System.currentTimeMillis();
         
-        result += "With caching took " + (endTime - startTime) + " milliseconds\n";
+        result += "Static Set With caching took " + (endTime - startTime) + " milliseconds\n";
+
+        startTime = System.currentTimeMillis();
+        result += testBigBadWithIterations(mapper, pgen.bigBadSet());
+        endTime = System.currentTimeMillis();
+        
+        result += "Big Bad Set With caching took " + (endTime - startTime) + " milliseconds\n";
+
         
         //dump the cache for debugging
         
@@ -111,6 +124,23 @@ public class PermTester {
             mapper.auth(t2,permset);
             mapper.auth(t3,permset);
             mapper.auth(t4,permset);
+        }
+        
+        return result;
+    }
+    
+    private String testBigBadWithIterations (PermInterface mapper, String[] permset) {
+        String result = "";
+        
+        String t1 = tgen.bigBadSetEndMatch();
+        result += formatAllowTest(t1, mapper.auth(t1, permset));
+        
+        String t2 = tgen.bigBadSetNoMatch();
+        result += formatAllowTest(t2, mapper.auth(t2, permset));
+        
+        for (int i = 0; i < iterations; i++) {
+            mapper.auth(t1, permset);
+            mapper.auth(t2, permset);
         }
         
         return result;

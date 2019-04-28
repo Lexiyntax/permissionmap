@@ -19,4 +19,16 @@ public class PermGenerator {
         return s;
     }
     
+    /**
+     * @return larger test set that is a worst case for scanning implementations
+     */
+    public String[] bigBadSet() {
+        String[] s= new String[1000];
+        for (int i = 0; i < 999; i++) {
+            s[i] = "xray:xray:xray:xray";
+        }
+        s[999] = "alpha:bravo:charlie:delta";
+        return s;
+    }
+    
 }

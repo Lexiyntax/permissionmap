@@ -36,4 +36,17 @@ public class TargetGenerator {
         return "a:x:d:c";
     }
     
+    /**
+     * @return A match for the end of the big bad set
+     */
+    public String bigBadSetEndMatch() {
+        return "alpha:bravo:charlie:delta";
+    }
+    
+    /**
+     * @return no match in the big bad set
+     */
+    public String bigBadSetNoMatch() {
+        return "none:none:none:none";
+    }
 }
