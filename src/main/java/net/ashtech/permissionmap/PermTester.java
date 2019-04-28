@@ -39,6 +39,11 @@ public class PermTester {
         return s += "----------------\n";
     }
     
+    /**
+     * Smoke tests basic test cases against the basic loop mapper
+     * 
+     * @return pretty string output of basic testing results
+     */
     public String doBasicTest() {
         String[] permset = pgen.staticSet();
         BasicLoopMapper mapper = new BasicLoopMapper();
@@ -54,6 +59,9 @@ public class PermTester {
         result += formatAllowTest(target, mapper.auth(target,permset));
 
         target = tgen.basicTargetNoMatch();
+        result += formatAllowTest(target, mapper.auth(target,permset));
+        
+        target = tgen.basicTargetWildCardMatch();
         result += formatAllowTest(target, mapper.auth(target,permset));
 
         return result;

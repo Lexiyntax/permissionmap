@@ -29,4 +29,11 @@ public class TargetGenerator {
         return "x:x:x:x";
     }
     
+    /**
+     * @return Basic single target with wildcard non-exact match against static set
+     */
+    public String basicTargetWildCardMatch() {
+        return "a:x:d:c";
+    }
+    
 }
